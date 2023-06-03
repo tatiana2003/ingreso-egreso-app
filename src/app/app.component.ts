@@ -9,10 +9,9 @@ import { AuthService } from './services/auth.service';
 export class AppComponent implements OnInit {
 
   constructor(private authService:AuthService) {
-    
+    this.authService.initAuthListener();
   }
   ngOnInit(): void {
-    this.authService.initAuthListener();
   }
   title = 'ingresosEgresosApp';
 }
