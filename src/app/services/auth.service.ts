@@ -6,23 +6,32 @@ import { Subscription, map } from 'rxjs';
 import { Usuario } from '../models/usuario.model';
 import { Store } from '@ngrx/store';
 import { setUser, unSetUser } from '../auth/auth.actions';
+import { unSetItems } from '../ingreso-egreso/ingreso-egreso.actions';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
   userSubs!: Subscription;
+  private _user!:Usuario | null;
+
+  get user(){
+    return {...this._user}
+  }
   constructor(public auth:AngularFireAuth, private firestore:AngularFirestore, private store:Store) { }
   initAuthListener(){
     this.auth.authState.subscribe(fuser=>{
       if(fuser){
         this.userSubs= this.firestore.doc(`${fuser.uid}/usuario`).valueChanges().subscribe((firestoreUser:any)=>{
           const user= Usuario.fromFirebase(firestoreUser)
+          this._user= user;
           this.store.dispatch(setUser({user}))
         })
       }else{
+        this._user= null;
         this.userSubs.unsubscribe();
-        this.store.dispatch(unSetUser())
+        this.store.dispatch(unSetUser());
+        this.store.dispatch(unSetItems())
         
       }
     })
@@ -45,4 +54,5 @@ export class AuthService {
       map(fuser=>fuser!=null)
     )
   }
+
 }
