@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { AppState } from 'src/app/app.reducer';
+import { AppStateWithIngresos } from '../ingreso-egreso.reducer';
 
 @Component({
   selector: 'app-estadistica',
@@ -18,13 +19,15 @@ export class EstadisticaComponent implements OnInit, OnDestroy {
   /**
    *
    */
-  constructor(private store: Store<AppState>) {}
+  constructor(private store: Store<AppStateWithIngresos>) {}
   ngOnInit(): void {
-    this.store
+    this.ingresoEgresoSubs= this.store
       .select('ingresosEgresos')
       .subscribe(({ items }) => this.generarEstadistica(items));
   }
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.ingresoEgresoSubs.unsubscribe();
+  }
 
   generarEstadistica(items: any) {
     this.ingresos = 0;
@@ -40,6 +43,5 @@ export class EstadisticaComponent implements OnInit, OnDestroy {
         this.egresos++;
       }
     });
-    console.log('estadisticas', items);
   }
 }

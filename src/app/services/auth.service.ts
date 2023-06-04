@@ -29,7 +29,7 @@ export class AuthService {
         })
       }else{
         this._user= null;
-        this.userSubs.unsubscribe();
+        this.userSubs?.unsubscribe();
         this.store.dispatch(unSetUser());
         this.store.dispatch(unSetItems())
         

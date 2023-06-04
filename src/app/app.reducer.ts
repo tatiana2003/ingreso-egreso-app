@@ -5,12 +5,10 @@ import * as ingresoEgreso from './ingreso-egreso/ingreso-egreso.reducer';
 export interface AppState {
     ui:ui.State,
     user:auth.State,
-    ingresosEgresos:ingresoEgreso.State
 
 }
 
 export const appReducers:ActionReducerMap<AppState>={
     ui:ui.uiReducer,
     user:auth.userReducer,
-    ingresosEgresos:ingresoEgreso.ingresoEgresoReducer
 }
